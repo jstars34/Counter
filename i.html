@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+    background-color: #0f2027;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    font-weight: bolder;
+}
+.container{
+    max-width: 500px;
+    height: 250px;
+    background: #162d36;
+    padding: 10px;
+    border-radius: 10px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    gap: 10px;
+    bottom: 0;
+    left: 0;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    display: grid;
+    right: 0;
+}
+.container .TimeDisplay{
+    display: flex;
+    width: 90%;
+    padding: 15px;
+    margin: auto;
+    height: 60%;
+    align-items: center;
+    text-align: center;
+    align-content: center;
+    border-radius: 10px;
+    background-color: #285466;
+}
+.container .TimeDisplay div{
+    font-weight: bolder;
+    font-size: xx-large;
+    font-family: monospace;
+}
+.container .TimeDisplay div.T{
+    font-weight: bolder;
+    font-size: xx-large;
+    font-family: monospace;
+    animation: ToTop 300ms linear;
+}
+.container .TimeDisplay div.D{
+    font-weight: bolder;
+    font-size: xx-large;
+    font-family: monospace;
+    animation: ToBotom 300ms linear;
+}
+@keyframes ToTop{
+    0%{
+        transform: translateY(-20px);
+  color: transparent;
+  text-shadow:0 0 5px white,0 0 10px white,0 0 15px white,0 0 20px white;
+
+opacity: 0.4;
+}
+    50%{
+        opacity: 0.3;
+  color: transparent;
+  text-shadow:0 0 5px white,0 0 10px white,0 0 15px white,0 0 20px white;
+}
+
+    100%{
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+@keyframes ToBotom{
+    0%{
+        transform: translateY(0px);
+        opacity: 0.4;
+         }
+    50%{
+        transform: translateY(0px);
+        opacity: 0.3;
+  text-shadow:0 0 5px white,0 0 10px white,0 0 15px white,0 0 20px white;
+}
+    100%{
+        transform: translateY(20px);
+        opacity: 0;
+    }
+}
+.container .TimeDisplay .NumSeparet{
+    height: 25px;
+    border: 1.5px solid rgba(255, 255, 255, 0.594);
+    border-radius: 20px;
+}
+.container .line{
+    border:2px solid #285466de;
+    width: 200px;
+    height: 0;
+    border-radius: 20px;
+}
+.container .ControlDisplay{
+    width: 100%;
+    text-align: center;
+}
+.container .ControlDisplay button{
+    background-color: rgb(94, 211, 129);
+    width: 200px;
+    height: 40px;
+    cursor: pointer;
+    color: black;
+    font-weight: bolder;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 2px solid #13a052;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    transition: all 500ms ease-in-out;
+}
+.container .ControlDisplay button:nth-child(1):hover{
+    /* box-shadow: -6px -6px 0px #81ebb1b0,-12px -12px 0px #61ab83,-18px -18px 0px #4a8464b0,-24px -24px 0px #325743; */
+    box-shadow: 5px 5px 3px #81ebb1b0;
+
+}
+.container .ControlDisplay button:nth-child(2):hover{
+    /* box-shadow: 6px -6px 0px #81ebb1b0,12px -12px 0px #61ab83,18px -18px 0px #4a8464b0,24px -24px 0px #325743; */
+    box-shadow: 5px 5px 3px #81ebb1b0;
+
+}
+.container .ControlDisplay button::-webkit-textfield-decoration-container{
+    background-color: #13a051;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="TimeDisplay">
+            <div id="Thousends"class="">0</div><hr class="NumSeparet">
+            <div id="hundreds"class="">0</div><hr class="NumSeparet">
+            <div id="tens"class="">0</div><hr class="NumSeparet">
+            <div id="ones"class="">0</div>
+        </div>
+        <hr class="line">
+         <div class="ControlDisplay">
+            <button id="ADD">ADD</button>
+            <button id="Restart">Restart</button>
+         </div>
+         <a t="true" href="#changed" id="RemoveNumSeparet" title="click here to change the style of the numbers">click here</a>
+    </div>
+   <script>
+    
+const ADDBtn = document.getElementById("ADD");
+const ResetBtn = document.getElementById("Restart");
+const Ones = document.getElementById("ones");
+const Tens = document.getElementById("tens");
+const Hundreds = document.getElementById("hundreds");
+const Thousands = document.getElementById("Thousends");
+const SpanDivs = [Ones,Tens,Hundreds,thousand]
+const HRS = document.querySelectorAll(".NumSeparet")
+const changingNum = document.getElementById("RemoveNumSeparet")
+changingNum.addEventListener("click", function () {
+    let note = changingNum.getAttribute('t')
+    if (note == 'true') {
+        HRS.forEach(elm => {
+            elm.style.display = 'none'
+        })
+        changingNum.setAttribute("t",'false')
+    }
+    else {
+        HRS.forEach(elm => {
+            elm.style = ''
+        })
+        changingNum.setAttribute("t",'true')
+    }
+})
+var one = 0
+var ten = 0
+var hundred = 0
+var thousand = 0
+var CicTime = false
+try {
+    let F = localStorage.getItem("Scored")
+    let y = F.split("")
+    one = Number(y[0])
+    ten = Number(y[1])
+    hundred = Number(y[2])
+    thousand = Number(y[3])
+    Ones.textContent = one
+    Tens.textContent = ten
+    Hundreds.textContent = hundred
+    Thousands.textContent = thousand
+} catch (error) {
+    console.log("error",error)
+}
+Thousands.textContent = thousand
+ResetBtn.addEventListener("click", function () {
+    one = 0
+    ten = 0
+    hundred = 0
+    thousand = 0
+    Ones.textContent = one
+    Tens.textContent = ten
+    Hundreds.textContent = hundred
+    Thousands.textContent = thousand
+    SpanDivs.forEach(btn => {
+        btn.classList.add("D")
+    })
+    setTimeout(() => {
+        SpanDivs.forEach(btn => {
+            btn.classList.remove("D")
+            btn.classList.add("T")
+        })
+        setTimeout(() => {
+            SpanDivs.forEach(btn => {
+                btn.classList.remove("D")
+                btn.classList.add("T")
+            })
+        }, 200);
+    }, 300);
+
+})
+ADDBtn.addEventListener("click", function () { 
+    if(CicTime) return
+    if (one == 9 && ten == 9 && hundred == 9 && thousand == 9) {
+        return console.log("All digits are at maximum value.");
+    
+    }
+    CicTime = true
+    setTimeout(() => {
+        CicTime = false
+    }, 300);
+    //continue
+    if (one == 9) {
+            Ones.classList.add("D")            
+            Tens.classList.add("D")
+        setTimeout(() => {
+        ten += 1
+        one = 0
+        Ones.textContent = one
+        Tens.textContent = ten
+        Ones.classList.add("T")
+            Tens.classList.add("T")
+            //
+            Ones.classList.remove("D")
+            Tens.classList.remove("D")
+        setTimeout(() => {
+            Ones.classList.remove("T")
+            Tens.classList.remove("T")
+            
+        }, 200);
+        }, 300);
+        
+    } else {
+            Ones.classList.add("D")            
+        setTimeout(() => {
+            one += 1
+        Ones.textContent = one
+        Ones.classList.add("T")
+        Ones.classList.remove("D")
+        setTimeout(() => {
+            Ones.classList.remove("T")
+        }, 200);
+        }, 300);
+    }
+    //
+    if (ten == 9 && one == 9) {
+            Tens.classList.add("D")            
+            Hundreds.classList.add("D")
+        setTimeout(() => {
+            hundred += 1
+            ten = 0
+            Tens.textContent = ten
+            Hundreds.textContent = hundred
+            Tens.classList.add("T")
+            Hundreds.classList.add("T")
+            Tens.classList.remove("D")
+            Hundreds.classList.remove("D")
+            setTimeout(() => {
+                Tens.classList.remove("T")
+                Hundreds.classList.remove("T")
+            }, 200);
+        }, 300);
+    } 
+    //
+    if (hundred == 9 && ten == 9 && one == 9) {
+            Hundreds.classList.add("D")            
+            Thousands.classList.add("D")
+       setTimeout(() => {
+        thousand += 1
+        hundred = 0
+        Hundreds.textContent = hundred
+        Thousands.textContent = thousand
+        Hundreds.classList.add("T")
+           Thousands.classList.add("T")
+           Hundreds.classList.remove("D")
+        Thousands.classList.remove("D")
+        setTimeout(() => {
+            Hundreds.classList.remove("T")
+            Thousands.classList.remove("T")
+        }, 200);
+       }, 300);
+    } 
+    //
+    if (thousand == 9 && thousand < 9) {
+        return console.log("Maximu Number")
+    } 
+    //
+
+});
+window.addEventListener("beforeunload", () => {
+    localStorage.setItem('Scored', `${one}${ten}${hundred}${thousand}`);
+  });
+   </script>
+</body>
+</html>
